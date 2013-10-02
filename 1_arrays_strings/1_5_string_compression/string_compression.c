@@ -40,10 +40,13 @@ char* compressString(const char* in) {
 			switch(state) {
 				case EInLiteral:
 					state = EInRepeat;
+					// Back over previous char so we can count it in
+					// the repeat.
+					--optr;
 					lastTagIndex = optr - out;
 					*optr++ = emit(REPEAT_START);
 					*optr++ = emit(*iptr);
-					repeatCount = 1;
+					repeatCount = 2;
 					break;
 				case EInRepeat:
 					++repeatCount;
@@ -85,10 +88,10 @@ void test(const char* input, const char* expectedCompressed) {
 
 int main(int argc, char **argv) {
 	test("paul", "paul");
-	test("hello", "hel\x81lo");
-	test("aaaa", "a\x83""a");
-	test("bbbbbbbb", "b\x87""b");
+	test("hello", "he\x82lo");
+	test("aaaa", "\x84""a");
+	test("bbbbbbbb", "\x88""b");
 	test("oppqqqrrrrssssstuuuuvvvww",
-		 "op\x81pq\x82qr\x83rs\x84stu\x83uv\x82vw\x81w");
+		 "o\x82p\x83q\x84r\x85st\x84u\x83v\x82w");
 	return 0;
 }
