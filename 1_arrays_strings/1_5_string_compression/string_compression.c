@@ -3,8 +3,7 @@
 
 typedef unsigned short uint8;
 
-const uint8 LITERAL_START = 0x80;
-const uint8 REPEAT_START  = 0x40;
+const uint8 REPEAT_START  = 0x80;
 
 typedef enum {
 	EInLiteral = 0,
@@ -26,30 +25,25 @@ char* compressString(const char* in) {
 
 	State state = EInLiteral;
     int repeatCount = 0;
-    int literalCount = 0;
 	const char* iptr = in;
 	char previous = '\0';
 
 	char* optr = out;
-    int lastTagIndex = 0;
-    *optr++ = emit(LITERAL_START); 
+    int lastTagIndex = -1;
 
 	while (*iptr) {
-		/* printf("In: %c Previous: %c State: %s LitCnt: %d RptCnt: %d LastTagIdx: %d\n",
+		/* printf("In: %c Previous: %c State: %s RptCnt: %d LastTagIdx: %d\n",
 			*iptr, previous, (state == EInLiteral ? "inlit" : "inrpt"),
-			literalCount, repeatCount, lastTagIndex);  
+			repeatCount, lastTagIndex);  
 		*/
 		if (*iptr == previous) {
 			switch(state) {
 				case EInLiteral:
-					*(out + lastTagIndex) += literalCount;
-					emitModify(*(out + lastTagIndex));
 					state = EInRepeat;
 					lastTagIndex = optr - out;
 					*optr++ = emit(REPEAT_START);
 					*optr++ = emit(*iptr);
 					repeatCount = 1;
-					literalCount = 0;
 					break;
 				case EInRepeat:
 					++repeatCount;
@@ -58,25 +52,23 @@ char* compressString(const char* in) {
 		} else {
 			switch(state) {
 				case EInLiteral:
-					++literalCount;
 					break;
 				case EInRepeat:
 					*(out + lastTagIndex) += repeatCount;
 					emitModify(*(out + lastTagIndex));
 					state = EInLiteral;
-					lastTagIndex = optr - out;
-					*optr++ = emit(LITERAL_START);
 					repeatCount = 0;
-					literalCount = 1;
 					break;
 			}
 			*optr++ = emit(*iptr);
 		}
 		previous = *iptr++;
 	}
-	// Finally update last tag
-	*(out + lastTagIndex) += (state == EInLiteral ? literalCount : repeatCount);
-	emitModify(*(out + lastTagIndex));
+	// Finally update last tag if in repeat
+	if (state == EInRepeat) {
+		*(out + lastTagIndex) +=  repeatCount;
+		emitModify(*(out + lastTagIndex));
+	}
 
 	return out;
 }
@@ -92,11 +84,11 @@ void test(const char* input, const char* expectedCompressed) {
 }
 
 int main(int argc, char **argv) {
-	test("paul", "\x84paul");
-	test("hello", "\x83hel\x41l\x81o");
-	test("aaaa", "\x81""a\x43""a");
-	test("bbbbbbbb", "\x81""b\x47""b");
+	test("paul", "paul");
+	test("hello", "hel\x81lo");
+	test("aaaa", "a\x83""a");
+	test("bbbbbbbb", "b\x87""b");
 	test("oppqqqrrrrssssstuuuuvvvww",
-		 "\x82op\x41p\x81q\x42q\x81r\x43r\x81s\x44s\x82tu\x43u\x81v\x42v\x81w\x41w");
+		 "op\x81pq\x82qr\x83rs\x84stu\x83uv\x82vw\x81w");
 	return 0;
 }
