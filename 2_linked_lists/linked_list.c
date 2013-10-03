@@ -38,3 +38,25 @@ void output(node* n) {
   }
   printf("NULL\n");
 }
+
+node* reverse(node* root) {
+  node* new_root = 0;
+  while (root) {
+    node* next = root->next;
+    root->next = new_root;
+    new_root = root;
+    root = next;
+  }
+  return new_root;
+}
+
+node* duplicate(node* srcHead) {
+  node* destHead = add(srcHead->i, NULL);
+  node* destPrev = destHead;
+  node* srcPtr = srcHead->next;
+  while (srcPtr) {
+    destPrev = add(srcPtr->i, destPrev);
+    srcPtr = srcPtr->next;
+  }
+  return destHead;
+}

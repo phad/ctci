@@ -10,5 +10,7 @@ node* add(int v, node* prev);
 void discard(node* prev);
 void release(node* head);
 void output(node* n);
+node* reverse(node* head);
+node* duplicate(node* head);
 
 #endif
