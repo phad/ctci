@@ -13,6 +13,14 @@ node* add(int v, node* prev) {
   return n;
 }
 
+void discard(node* prev) {
+  node* to_remove = prev->next;
+  if (to_remove) {
+    prev->next = to_remove->next;
+    free(to_remove);
+  }
+}
+
 void release(node* head) {
   node* next = NULL;
   while (head) {
