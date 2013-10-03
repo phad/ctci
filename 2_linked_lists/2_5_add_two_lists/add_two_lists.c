@@ -5,9 +5,6 @@
 
 #include "../linked_list.h"
 
-// k is a 0-based index into the list;
-// returns the new head of the list in case it is the
-// current head that is deleted.
 node* add_two_lists(node* head1, node* head2) {
   if (head1) {
     node* ptr = head1;
@@ -18,7 +15,7 @@ node* add_two_lists(node* head1, node* head2) {
   } else {
     head1 = head2;
   }
-  // Unlink 'ptr' if we didn't run off the end of the list.
+
   node* new_head = (head1 ? head1 : (head2 ? head2 : NULL));
   return new_head;
 }
