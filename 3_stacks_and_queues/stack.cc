@@ -43,3 +43,10 @@ int Stack::head() const {
   }
   return stack_[size_ - 1]; 
 }
+
+int Stack::peek(int pos) const {
+  if (pos >= size_) {
+    throw new StackAccessException;
+  }
+  return stack_[pos];
+}

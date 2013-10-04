@@ -12,6 +12,7 @@ class Stack {
   int pop();
   int size() const { return size_; }
   int head() const;
+  int peek(int pos) const;
 
  private:
   Stack(const Stack&);
@@ -26,5 +27,6 @@ class Stack {
 
 class StackEmptyException {};
 class StackFullException {};
+class StackAccessException {};
 
 #endif
