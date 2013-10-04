@@ -1,8 +1,6 @@
 #include <iostream>
 #include <assert.h>
 
-// using namespace std;
-
 class MinStack {
  public:
   explicit MinStack(int capacity);
