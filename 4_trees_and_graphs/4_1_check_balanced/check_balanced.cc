@@ -3,85 +3,9 @@
 #include <iostream>
 #include <string>
 
+#include "../tree.h"
+
 using namespace std;
-
-class Node {
- public:
-  Node(string key, int value)
-      : key_(key), value_(value),
-        left_(NULL), right_(NULL) {}
-  ~Node() { delete left_; delete right_; }
-
-  string key_;
-  int value_;
-  Node* left_;
-  Node* right_;
-};
-
-class BST {
- private:
-  BST(const BST&);
-  BST& operator=(const BST&);
-
-  Node* put(Node* node, string key, int value) {
-    if (!node) {
-      return new Node(key, value);
-    }
-    if (key < node->key_) {
-      node->left_ = put(node->left_, key, value);
-    } else if (key > node->key_) {
-      node->right_ = put(node->right_, key, value);
-    } else {
-      node->value_ = value;
-    }
-    return node;
-  }
-
-  int* get(Node* node, string key) const {
-    if (!node) return NULL;
-    if (key < node->key_) {
-      return get(node->left_, key);
-    } else if (key > node->key_) {
-      return get(node->left_, key);
-    } else {
-      return &node->value_;
-    }
-  }
-
-  Node* root_;
-  friend ostream& operator<<(ostream& ostr, const BST& bst);
-
- public:
-  BST() : root_(NULL) { }
-  ~BST() { delete root_; }
-
-  void put(string key, int value) {
-    root_= put(root_, key, value);
-  }
-  int* get(string key) const {
-    return get(root_, key);
-  }
-  const Node& root() const { return *root_; }
-};
-
-ostream& outputNode(ostream&ostr, const Node& node, int depth) {
-  string indent;
-  for (int d = 0; d < depth; ++d) { indent += ' '; }
-  ostr << indent << "K: " << node.key_ << " V: " << node.value_ << endl;
-  if (node.left_) {
-    ostr << indent << "L:" << endl;
-    outputNode(ostr, *node.left_, depth + 1);
-  }
-  if (node.right_) {
-    ostr << indent << "R:" << endl;
-    outputNode(ostr, *node.right_, depth + 1);
-  }
-  return ostr;
-}
-
-ostream& operator<<(ostream& ostr, const BST& bst) {
-  return outputNode(ostr, bst.root(), 0);
-}
 
 bool isBalanced(const Node& n) {
   if (n.left_ && n.right_) {
