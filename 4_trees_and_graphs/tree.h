@@ -35,6 +35,7 @@ class BST {
   void put(std::string key, int value);
   int* get(std::string key) const;
   const Node& root() const;
+  bool isBalanced() const;
 };
 
 std::ostream& operator<<(std::ostream& ostr, const BST& bst);

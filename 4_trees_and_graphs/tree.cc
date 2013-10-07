@@ -49,6 +49,36 @@ const Node& BST::root() const {
   return *root_;
 }
 
+int abs(int val) {
+  return val < 0 ? -val : val;
+}
+
+int max(int a, int b) {
+  return a > b ? a : b;
+}
+
+int checkHeights(const Node* node) {
+  if (node == NULL) {
+    return 0;
+  }
+  int leftHeight = checkHeights(node->left_);
+  if (leftHeight == -1) {
+    return -1;
+  }
+  int rightHeight = checkHeights(node->right_);
+  if (rightHeight == -1) {
+    return -1;
+  }
+  if (abs(leftHeight - rightHeight) > 1) {
+    return -1;
+  }
+  return 1 + max(leftHeight, rightHeight);
+}
+
+bool BST::isBalanced() const {
+  return (checkHeights(root_) != -1);
+}
+
 // Tree output inspired by:
 // http://stackoverflow.com/questions/1649027/how-do-i-print-out-a-tree-structure
 ostream& outputNode(ostream& ostr, const Node& node,
