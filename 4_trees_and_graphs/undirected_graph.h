@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <set>
-#include <string>
 #include <vector>
 
 #include "graph.h"
@@ -24,7 +23,6 @@ class UndirectedGraph : public GraphInterface {
   UndirectedGraph& operator=(const UndirectedGraph&);
 
   const int numVertices_;
-  int numEdges_;
   std::vector<std::set<int> > adjacencyLists_;
   friend std::ostream& operator<<(std::ostream& ostr, const UndirectedGraph& graph);
 };
