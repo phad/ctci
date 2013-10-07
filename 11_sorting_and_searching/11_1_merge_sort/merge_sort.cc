@@ -27,23 +27,21 @@ void MergeSort::doSort(std::vector<int>& input, std::vector<int>& scratch, int f
   doSort(input, scratch, first, partition);
   doSort(input, scratch, partition + 1, last);
 
-  scratch.clear();
   int firstPos = first, secondPos = partition + 1;
+  int scratchPos = first;
   int remain = last - first + 1;
   while (remain-- > 0) {
     if ((firstPos <= partition) &&
         ((secondPos > last) || (input.at(firstPos) <= input.at(secondPos)))) {
-      scratch.push_back(input[firstPos]);
-      firstPos++;
+      scratch[scratchPos++] = input[firstPos++];
     } else {
-      scratch.push_back(input[secondPos]);
-      secondPos++;
+      scratch[scratchPos++] = input[secondPos++];
     }
     ++numCompares;
   }
 
   for (int i = 0; i < last - first + 1; ++i) {
-    input[first + i] = scratch[i];
+    input[first + i] = scratch[first + i];
   }
 }
 
