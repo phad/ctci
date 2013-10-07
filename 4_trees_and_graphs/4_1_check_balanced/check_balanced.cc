@@ -7,15 +7,36 @@
 
 using namespace std;
 
-bool isBalanced(const Node& n) {
-  if (n.left_ && n.right_) {
-    return isBalanced(*n.left_) && isBalanced(*n.right_);
-  } else if (n.left_ && !n.right_) {
-    return (n.left_->left_ == NULL) && (n.left_->right_ == NULL); 
-  } else if (!n.left_ && n.right_) {
-    return (n.right_->left_ == NULL) && (n.right_->right_ == NULL); 
+int abs(int val) {
+  return val < 0 ? -val : val;
+}
+
+int max(int a, int b) {
+  return a > b ? a : b;
+}
+
+int checkHeights(const Node* node) {
+  if (node == NULL) {
+    return 0;
   }
-  return true;
+  int leftHeight = checkHeights(node->left_);
+  if (leftHeight == -1) {
+    return -1;
+  }
+  int rightHeight = checkHeights(node->right_);
+  if (rightHeight == -1) {
+    return -1;
+  }
+  int r = 1 + max(leftHeight, rightHeight);
+  cout << "Height for node " << node->key_ << " is " << r << endl;
+  if (abs(leftHeight - rightHeight) > 1) {
+    return -1;
+  }
+  return r;
+}
+
+bool isBalanced(const Node& root) {
+  return (checkHeights(&root) != -1);
 }
 
 void testTree(string* keys, int* values, int count, bool expBal) {
