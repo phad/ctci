@@ -5,14 +5,14 @@ using std::endl;
 using std::ostream;
 using std::string;
 
-Node* BST::put(Node* node, string key, int value) {
+Node* BST::put(Node* node, const Node* parent, string key, int value) {
   if (!node) {
-    return new Node(key, value);
+    return new Node(key, value, parent);
   }
   if (key < node->key_) {
-    node->left_ = put(node->left_, key, value);
+    node->left_ = put(node->left_, node, key, value);
   } else if (key > node->key_) {
-    node->right_ = put(node->right_, key, value);
+    node->right_ = put(node->right_, node, key, value);
   } else {
     node->value_ = value;
   }
@@ -39,7 +39,7 @@ BST::~BST() {
 }
 
 void BST::put(string key, int value) {
-  root_= put(root_, key, value);
+  root_= put(root_, NULL, key, value);
 }
 
 int* BST::get(string key) const {
