@@ -49,21 +49,34 @@ const Node& BST::root() const {
   return *root_;
 }
 
-ostream& outputNode(ostream&ostr, const Node& node, int depth) {
-  string indent;
-  for (int d = 0; d < depth; ++d) { indent += ' '; }
-  ostr << indent << "K: " << node.key_ << " V: " << node.value_ << endl;
+// Tree output inspired by:
+// http://stackoverflow.com/questions/1649027/how-do-i-print-out-a-tree-structure
+ostream& outputNode(ostream& ostr, const Node& node,
+    string indent, bool isLeft, bool isLast) {
+  ostr << indent;
+  bool isRoot = indent.size() == 0;
+  if (isLast) {
+    ostr << "\\-";
+    indent += "  ";
+  } else {
+    ostr << "|-";
+    indent += "| ";
+  }
+  if (isRoot) {
+    ostr << "o-";
+  } else {
+    ostr << (isLeft ? "<-" : ">-");
+  }
+  ostr << node.key_ << "(" << node.value_ << ")" << endl;
   if (node.left_) {
-    ostr << indent << "L:" << endl;
-    outputNode(ostr, *node.left_, depth + 1);
+    outputNode(ostr, *node.left_, indent, true, (node.right_ == NULL));
   }
   if (node.right_) {
-    ostr << indent << "R:" << endl;
-    outputNode(ostr, *node.right_, depth + 1);
+    outputNode(ostr, *node.right_, indent, false, true);
   }
   return ostr;
-}
+} 
 
 ostream& operator<<(ostream& ostr, const BST& bst) {
-  return outputNode(ostr, bst.root(), 0);
+  return outputNode(ostr, bst.root(), "" , false, true);
 }
