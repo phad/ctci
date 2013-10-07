@@ -10,37 +10,40 @@ class MergeSort {
  public:
   static void sort(std::vector<int>& input);
  private:
-  static void doSort(std::vector<int>& input, int first, int last);
+  static void doSort(std::vector<int>& input, std::vector<int>& scratch, int first, int last);
 };
 
 void MergeSort::sort(std::vector<int>& input) {
-  doSort(input, 0, input.size() - 1);
+  std::vector<int> scratch(input.size(), 0);
+  doSort(input, scratch, 0, input.size() - 1);
 }
 
-void MergeSort::doSort(std::vector<int>& input, int first, int last) {
+void MergeSort::doSort(std::vector<int>& input, std::vector<int>& scratch, int first, int last) {
   if (first == last) {
     return;
   }
 
   int partition = (first + last) / 2;
-  doSort(input, first, partition);
-  doSort(input, partition + 1, last);
+  doSort(input, scratch, first, partition);
+  doSort(input, scratch, partition + 1, last);
 
+  scratch.clear();
   int firstPos = first, secondPos = partition + 1;
-  std::vector<int> tmp;
   int remain = last - first + 1;
   while (remain-- > 0) {
     if ((firstPos <= partition) &&
         ((secondPos > last) || (input.at(firstPos) <= input.at(secondPos)))) {
-      tmp.push_back(input.at(firstPos++));
+      scratch.push_back(input[firstPos]);
+      firstPos++;
     } else {
-      tmp.push_back(input.at(secondPos++));
+      scratch.push_back(input[secondPos]);
+      secondPos++;
     }
     ++numCompares;
   }
 
   for (int i = 0; i < last - first + 1; ++i) {
-    input[first + i] = tmp[i];
+    input[first + i] = scratch[i];
   }
 }
 
