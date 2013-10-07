@@ -5,21 +5,21 @@
 using namespace std;
 
 // explicit
-Graph::Graph(int numVertices)
+UndirectedGraph::UndirectedGraph(int numVertices)
     : numVertices_(numVertices) {
   for (int v = 0; v < numVertices; ++v) {
     adjacencyLists_.push_back(set<int>());
   }
 }
 
-Graph::~Graph() {
+UndirectedGraph::~UndirectedGraph() {
 }
 
-int Graph::numVertices() const {
+int UndirectedGraph::numVertices() const {
   return numVertices_;
 }
 
-int Graph::numEdges() const {
+int UndirectedGraph::numEdges() const {
   int edgeCount = 0;
   for (vector<set<int> >::const_iterator it = adjacencyLists_.begin();
        it != adjacencyLists_.end(); ++it) {
@@ -28,20 +28,21 @@ int Graph::numEdges() const {
   return edgeCount / 2;
 }
 
-void Graph::addEdge(int fromVertex, int toVertex) {
+void UndirectedGraph::addEdge(int fromVertex, int toVertex) {
   assert(fromVertex >= 0 && fromVertex < numVertices_);
   assert(toVertex >= 0 && toVertex < numVertices_);
   adjacencyLists_[fromVertex].insert(toVertex);
   adjacencyLists_[toVertex].insert(fromVertex);
 }
 
-set<int>::const_iterator Graph::adjacencyList(int vertex) const {
+set<int> UndirectedGraph::adjacencyList(int vertex) const {
   assert(vertex >= 0 && vertex < numVertices_);
-  return adjacencyLists_[vertex].begin();
+  set<int> adjList = adjacencyLists_[vertex];
+  return adjList;
 }
 
-ostream& operator<<(ostream& ostr, const Graph& gr) {
-  ostr << "Graph - numVertices: " << gr.numVertices_ << ", ";
+ostream& operator<<(ostream& ostr, const UndirectedGraph& gr) {
+  ostr << "UndirectedGraph - numVertices: " << gr.numVertices_ << ", ";
   ostr << "numEdges: " << gr.numEdges() << endl;
 
   for (int v = 0; v < gr.numVertices(); ++v) {

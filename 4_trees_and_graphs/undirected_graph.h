@@ -6,27 +6,29 @@
 #include <string>
 #include <vector>
 
-class Graph {
+#include "graph.h"
+
+class UndirectedGraph : public GraphInterface {
  public:
-  explicit Graph(int numVertices);
-  ~Graph();
+  explicit UndirectedGraph(int numVertices);
+  virtual ~UndirectedGraph();
 
-  int numVertices() const;
-  int numEdges() const;
+  virtual int numVertices() const;
+  virtual int numEdges() const;
 
-  void addEdge(int fromVertex, int toVertex);
-  std::set<int>::const_iterator adjacencyList(int vertex) const;
+  virtual void addEdge(int fromVertex, int toVertex);
+  virtual std::set<int> adjacencyList(int vertex) const;
 
  private:
-  Graph(const Graph&);
-  Graph& operator=(const Graph&);
+  UndirectedGraph(const UndirectedGraph&);
+  UndirectedGraph& operator=(const UndirectedGraph&);
 
   const int numVertices_;
   int numEdges_;
   std::vector<std::set<int> > adjacencyLists_;
-  friend std::ostream& operator<<(std::ostream& ostr, const Graph& Graph);
+  friend std::ostream& operator<<(std::ostream& ostr, const UndirectedGraph& graph);
 };
 
-std::ostream& operator<<(std::ostream& ostr, const Graph& Graph);
+std::ostream& operator<<(std::ostream& ostr, const UndirectedGraph& graph);
 
 #endif

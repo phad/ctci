@@ -10,7 +10,7 @@ enum ETraverseState {
   EVisited
 };
 
-bool pathExists(const Graph& g, int n1, int n2) {
+bool pathExists(const GraphInterface& g, int n1, int n2) {
   map<int, ETraverseState> traversal;
   vector<int> toVisitList;
   for (int n = 0; n < g.numVertices(); ++n) {
@@ -43,18 +43,19 @@ bool pathExists(const Graph& g, int n1, int n2) {
 }
 
 int main(int argc, char **argv) {
-  Graph g(8);
-  g.addEdge(0, 1);
-  g.addEdge(0, 2);
-  g.addEdge(0, 3);
-  g.addEdge(3, 4);
-  g.addEdge(4, 5);
+  GraphInterface* g = new UndirectedGraph(8);
+  g->addEdge(0, 1);
+  g->addEdge(0, 2);
+  g->addEdge(0, 3);
+  g->addEdge(3, 4);
+  g->addEdge(4, 5);
 
-  assert(pathExists(g, 0, 1));
-  assert(pathExists(g, 0, 4));
-  assert(pathExists(g, 1, 5));
-  assert(!pathExists(g, 3, 6));
-  assert(!pathExists(g, 6, 7));
+  assert(pathExists(*g, 0, 1));
+  assert(pathExists(*g, 0, 4));
+  assert(pathExists(*g, 1, 5));
+  assert(!pathExists(*g, 3, 6));
+  assert(!pathExists(*g, 6, 7));
 
+  delete g;
   return 0;
 }
