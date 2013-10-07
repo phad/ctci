@@ -1,5 +1,7 @@
 #include <assert.h>
 #include <map>
+
+#include "../digraph.h"
 #include "../undirected_graph.h"
 
 using namespace std;
@@ -42,20 +44,54 @@ bool pathExists(const GraphInterface& g, int n1, int n2) {
   return false;
 }
 
-int main(int argc, char **argv) {
-  GraphInterface* g = new UndirectedGraph(8);
+void testUndirectedGraph() {
+  UndirectedGraph* g = new UndirectedGraph(8);
   g->addEdge(0, 1);
   g->addEdge(0, 2);
   g->addEdge(0, 3);
   g->addEdge(3, 4);
   g->addEdge(4, 5);
+  cout << *g << endl;
 
   assert(pathExists(*g, 0, 1));
+  assert(pathExists(*g, 1, 0));
+
   assert(pathExists(*g, 0, 4));
+  assert(pathExists(*g, 4, 0));
+
   assert(pathExists(*g, 1, 5));
+  assert(pathExists(*g, 5, 1));
+
   assert(!pathExists(*g, 3, 6));
   assert(!pathExists(*g, 6, 7));
 
   delete g;
+}
+
+void testDigraph() {
+  Digraph* g = new Digraph(8);
+  g->addEdge(0, 1);
+  g->addEdge(0, 2);
+  g->addEdge(0, 3);
+  g->addEdge(3, 4);
+  g->addEdge(4, 5);
+  cout << *g << endl;
+
+  assert(pathExists(*g, 0, 1));
+  assert(!pathExists(*g, 1, 0));
+
+  assert(pathExists(*g, 0, 4));
+  assert(!pathExists(*g, 4, 0));
+
+  assert(!pathExists(*g, 1, 5));
+  assert(!pathExists(*g, 3, 6));
+  assert(!pathExists(*g, 6, 7));
+
+  delete g;
+}
+
+int main(int argc, char **argv) {
+  testUndirectedGraph();
+  testDigraph();
   return 0;
 }
