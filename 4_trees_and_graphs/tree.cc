@@ -4,6 +4,7 @@ using std::cout;
 using std::endl;
 using std::ostream;
 using std::string;
+using std::vector;
 
 Node* BST::put(Node* node, const Node* parent, string key, int value) {
   if (!node) {
@@ -77,6 +78,49 @@ int checkHeights(const Node* node) {
 
 bool BST::isBalanced() const {
   return (checkHeights(root_) != -1);
+}
+
+typedef void (*TraversalFunctor)(const Node*, void*);
+
+void inOrderTraversal(const Node* node, TraversalFunctor action, void* arg) {
+  if (node->left_) inOrderTraversal(node->left_, action, arg);
+  (*action)(node, arg);
+  if (node->right_) inOrderTraversal(node->right_, action, arg);
+}
+
+void preOrderTraversal(const Node* node, TraversalFunctor action, void* arg) {
+  (*action)(node, arg);
+  if (node->left_) preOrderTraversal(node->left_, action, arg);
+  if (node->right_) preOrderTraversal(node->right_, action, arg);
+}
+
+void postOrderTraversal(const Node* node, TraversalFunctor action, void* arg) {
+  if (node->left_) postOrderTraversal(node->left_, action, arg);
+  if (node->right_) postOrderTraversal(node->right_, action, arg);
+  (*action)(node, arg);
+}
+
+void addKeyToVector(const Node* node, void* arg) {
+  vector<string>* keys = reinterpret_cast<vector<string>*>(arg);
+  keys->push_back(node->key_);
+}
+
+vector<string> BST::keysTraversedInOrder() const {
+  vector<string> keys;
+  inOrderTraversal(root_, &addKeyToVector, reinterpret_cast<void*>(&keys));
+  return keys;
+}
+
+vector<string> BST::keysTraversedPreOrder() const {
+  vector<string> keys;
+  preOrderTraversal(root_, &addKeyToVector, reinterpret_cast<void*>(&keys));
+  return keys;
+}
+
+vector<string> BST::keysTraversedPostOrder() const {
+  vector<string> keys;
+  postOrderTraversal(root_, &addKeyToVector, reinterpret_cast<void*>(&keys));
+  return keys;
 }
 
 // Tree output inspired by:

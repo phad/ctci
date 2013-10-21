@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 class Node {
  public:
@@ -36,6 +37,10 @@ class BST {
   int* get(std::string key) const;
   const Node& root() const;
   bool isBalanced() const;
+  std::vector<std::string> keysTraversedInOrder() const;
+  std::vector<std::string> keysTraversedPreOrder() const;
+  std::vector<std::string> keysTraversedPostOrder() const;
+
 };
 
 std::ostream& operator<<(std::ostream& ostr, const BST& bst);
