@@ -54,7 +54,7 @@ vector<ListElement*> bfsTreeAsLists(const BST& bst) {
 
 int main(int argc, char** argv) {
   BST* tree = new BST;
-  int vals[] = {0, 4, 2, 1, 3, 6, 5, 7, 8, 9};
+  int vals[] = {4, 2, 1, 3, 6, 5, 7};
   for (int idx = 0; idx < sizeof(vals)/sizeof(int); ++idx) {
     ostringstream oss;
     oss << vals[idx];
